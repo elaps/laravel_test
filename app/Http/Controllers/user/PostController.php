@@ -4,11 +4,11 @@ namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
-use App\QueryBuilder;
+use App\El\QueryBuilder;
 use Illuminate\Http\Request;
 
 class PostController extends Controller {
-    public $posts;
+    public $tableClass;
 
     public function __construct() {
     }
@@ -17,13 +17,10 @@ class PostController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-
-        $attributes = request()->all();
+        $attributes = request()->query();
         $query = Post::query()->where('published', 1);
         $query = QueryBuilder::build($query, $attributes);
-
         $posts = $query;
-
         return view('user.posts.index', compact('posts'));
     }
 
@@ -49,8 +46,7 @@ class PostController extends Controller {
             'title'=> 'заголовок'
         ]);
 
-        session()->flash('status','Сохранено');
-        return redirect()->back()->withInput();
+        return redirect()->back()->withInput()->with('status','Сохранено');
     }
 
     /**

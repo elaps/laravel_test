@@ -2,23 +2,31 @@
 
 namespace App\Models;
 
+use App\El\HasActiveAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 
 class Post extends Model {
     use HasFactory;
+    use HasActiveAttributes;
 
     public static function rules() {
 
     }
 
-    public static function attributes() {
 
-    }
-
+    /**
+     * @return string []
+     */
     public static function attributeLabels() {
-
+        return [
+            'id' => 'ID',
+            'user_id' => 'User',
+            'title' => 'Title',
+            'content' => 'Контент',
+            'created_at' => 'Дата создания',
+            'published' => 'Опубликовано',
+        ];
     }
 
     public static function sortAttributes() {
@@ -26,7 +34,7 @@ class Post extends Model {
             'id',
             'user_id',
             'title',
-            'created_at' => function ($query, $direction , $attributes) {
+            'created_at' => function ($query, $direction, $attributes) {
                 return $query->orderBy('created_at', $direction);
             }
         ];
@@ -35,9 +43,10 @@ class Post extends Model {
     public static function filterAttributes() {
         return [
             'id',
-            'user_id'=> 'between',
+            'user_id',
             'title' => 'like',
-            'created_at' => 'dateBetween',
+            //ToDo Period
+            'created_at' => 'between',
             'alias' => function ($query, $attributes) {
                 if ($attributes['alias'] == '1') {
                     $query->where('id', 5);
@@ -47,13 +56,5 @@ class Post extends Model {
         ];
     }
 
-    /*
-    public static function setAttributes($attributes,$scenario = 'default'){
 
-    }
-
-    public static function validate($scenario = 'default'){
-
-    }
-    */
 }

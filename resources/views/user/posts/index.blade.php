@@ -24,5 +24,4 @@
     >
 
     </x-el-db-grid.table>
-
 @endsection
